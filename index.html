@@ -100,13 +100,13 @@
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm mb-1">AI難度 (搜索深度)</label>
-                    <input type="range" id="aiDepth" min="1" max="5" value="3" class="w-full">
-                    <span id="aiDepthValue" class="text-sm">3</span>
+                    <input type="range" id="aiDepth" min="1" max="12" value="7" class="w-full">
+                    <span id="aiDepthValue" class="text-sm">7</span>
                 </div>
                 <div>
                     <label class="block text-sm mb-1">搜索廣度</label>
-                    <input type="range" id="searchWidth" min="3" max="15" value="8" class="w-full">
-                    <span id="searchWidthValue" class="text-sm">8</span>
+                    <input type="range" id="searchWidth" min="3" max="25" value="15" class="w-full">
+                    <span id="searchWidthValue" class="text-sm">15</span>
                 </div>
                 <div>
                     <label class="block text-sm mb-1">先手</label>
@@ -171,8 +171,8 @@ let gameState = {
 
 // AI設定
 let aiSettings = {
-    depth: 3,
-    width: 8,
+    depth: 7,
+    width: 15,
     firstPlayer: 'human'
 };
 
@@ -779,6 +779,25 @@ function drawChess() {
         }
     }
     
+    // 顯示最後一步走法的起點與終點（含AI與玩家）
+    if (gameState.history.length > 0) {
+        const last = gameState.history[gameState.history.length - 1];
+        // 起點高亮（藍色）
+        ctx.strokeStyle = 'rgba(59, 130, 246, 0.9)'; // tailwind blue-500
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(boardOffsetX + last.fromCol * cellSize, boardOffsetY + last.fromRow * cellSize,
+                cellSize * 0.46, 0, Math.PI * 2);
+        ctx.stroke();
+        // 終點高亮（橘色）
+        ctx.strokeStyle = 'rgba(251, 146, 60, 0.95)'; // orange-400
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.arc(boardOffsetX + last.toCol * cellSize, boardOffsetY + last.toRow * cellSize,
+                cellSize * 0.5, 0, Math.PI * 2);
+        ctx.stroke();
+    }
+
     // 將提示覆蓋在棋子之上，避免被遮擋
     if (gameState.selectedPiece) {
         const { row, col } = gameState.selectedPiece;
